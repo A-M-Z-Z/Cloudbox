@@ -25,10 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
         $_SESSION['email'] = $user['email'];
         $_SESSION['verified'] = $user['verified'];
         
-        if ($_SESSION['verified'] == 1) {
+       
             $verification_code = rand(100000, 999999);
             $query = "UPDATE users SET verification_code = '$verification_code' WHERE username = '{$_SESSION['username']}'";
-            if ($conn->query($query) === TRUE) {
                 // Send Verification Email
                 $subject = "Your CloudBOX 2FA Verification Code";
                 $message = "Hello {$_SESSION['username']},\n\nYour 2FA verification code is: $verification_code\n\nThank you for registering with CloudBOX.";
@@ -40,43 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username'], $_POST['p
 
         }
         }
-    }
-        else {
-            $verification_code = rand(100000, 999999);
-            $query = "UPDATE users SET verification_code = '$verification_code' WHERE username = '{$_SESSION['username']}'";
-            if ($conn->query($query) === TRUE) {
-                // Send Verification Email
-                $subject = "Your CloudBOX 2FA Verification Code";
-                $message = "Hello {$_SESSION['username']},\n\nYour 2FA verification code is: $verification_code\n\nThank you for registering with CloudBOX.";
-                $headers = "From: no-reply@cloudbox.com";
-                mail($_SESSION['email'], $subject, $message, $headers);
-                
-                header('Location: verify.php?username=' . urlencode($_SESSION['username']));
-                exit;
-            } else {
-                echo "<p style='color:red;'>Failed to update verification code.</p>";
-            }
-        }
-    } else {
+
+        
+     else {
         echo "<p style='color:red;'>Invalid username or password</p>";
-        $stmt = $conn->prepare("SELECT COUNT(*) FROM login_attempts WHERE ip_address = ? AND attempt_time > NOW() - INTERVAL 10 MINUTE");
-        $stmt->bind_param("s", $ip);
-        $stmt->execute();
-        $stmt->bind_result($attempts);
-        $stmt->fetch();
-        $stmt->close();
-
-        if ($attempts >= 5) {
-            die("Too many login attempts. Try again later.");
-}
-
-        // Log failed attempts
-        
-            $stmt = $conn->prepare("INSERT INTO login_attempts (ip_address) VALUES (?)");
-            $stmt->bind_param("s", $ip);
-            $stmt->execute();
-        
-    
+ 
 }
 ?>
 
