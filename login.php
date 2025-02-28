@@ -2,10 +2,10 @@
 session_start(); // Start session to store user data
 
 // Database Connection for LWS phpMyAdmin
-$host = '91.216.107.164';
-$user = 'amzz2427862';
-$pass = '37qB5xqen4prX8@';
-$dbname = 'amzz2427862';
+$host = 'localhost';
+$user = 'root';
+$pass = 'root';
+$dbname = 'cloudbox';
 $conn = new mysqli($host, $user, $pass, $dbname);
 $ip = $_SERVER['REMOTE_ADDR']; // Get user IP
 
